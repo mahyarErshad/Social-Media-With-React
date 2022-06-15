@@ -1,13 +1,13 @@
 import React from "react";
 import Header from "./components/Header";
-import Main from "./components/Main";
+import GuestLogin from "./components/Main/GuestLogin";
 import Footer from "./components/Footer";
 
 function App() {
   return (
     <>
       <Header />
-      <Main />
+      <GuestLogin />
       <Footer />
     </>
   );
