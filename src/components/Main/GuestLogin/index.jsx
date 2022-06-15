@@ -1,9 +1,8 @@
-import React from 'react'
+import React from "react";
 
 function Main() {
   return (
-    <>
-        <div className="container py-md-5">
+    <div className="container py-md-5">
       <div className="row align-items-center">
         <div className="col-lg-7 py-3 py-md-5">
           <h1 className="display-3">Remember Writing?</h1>
@@ -36,8 +35,7 @@ function Main() {
         </div>
       </div>
     </div>
-    </>
-  )
+  );
 }
 
-export default Main
+export default Main;
