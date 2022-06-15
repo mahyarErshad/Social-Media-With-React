@@ -3,7 +3,7 @@ import Container from "../Container";
 
 function Main() {
   return (
-    <Container wide={true}>
+    <Container wide={true} title = {"Social Media"}>
       <div className="row align-items-center">
         <div className="col-lg-7 py-3 py-md-5">
           <h1 className="display-3">Remember Writing?</h1>
