@@ -1,7 +1,7 @@
 import axios from "axios";
 import React, { useState } from "react";
 
-function HeaderLoggedOut() {
+function HeaderLoggedOut(props) {
   async function handleSubmit(e) {
     e.preventDefault();
     try {
@@ -9,7 +9,15 @@ function HeaderLoggedOut() {
         username,
         password,
       });
-      console.log(response.data);
+      if (response.data){
+        props.setLoggedIn(true)
+        // console.log(response.data)
+        localStorage.setItem("socialMediaUsername", response.data.username)
+        localStorage.setItem("socialMediaAvatar", response.data.avatar)
+        localStorage.setItem("socialMediatoken", response.data.token)
+      } else{
+        console.log("invalid username or password")
+      }
     } catch (e) {
       console.error(e);
     }

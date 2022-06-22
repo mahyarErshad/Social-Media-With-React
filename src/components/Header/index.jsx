@@ -1,18 +1,20 @@
-import React from "react";
+import React, { useState } from "react";
 import { Link } from "react-router-dom";
+import HeaderLoggedIn from "./HeaderLoggedIn/index.jsx";
 import HeaderLoggedOut from "./HeaderLoggedOut/index.jsx"
 
 function Header() {
+  const [loggedIn, setLoggedIn] = useState(Boolean(localStorage.getItem("socialMediatoken")));
   return (
     <>
       <header className="header-bar bg-primary mb-3">
         <div className="container d-flex flex-column flex-md-row align-items-center p-3">
           <h4 className="my-0 mr-md-auto font-weight-normal">
             <Link to="/" className="text-white">
-              React.js Social Media
+              React Social Media
             </Link>
           </h4>
-          <HeaderLoggedOut />
+          {loggedIn ? <HeaderLoggedIn setLoggedIn={setLoggedIn}/> : <HeaderLoggedOut setLoggedIn={setLoggedIn}/>}
         </div>
       </header>
     </>
