@@ -5,18 +5,18 @@ function HeaderLoggedOut(props) {
   async function handleSubmit(e) {
     e.preventDefault();
     try {
-      const response = await axios.post("http://localhost:8080/login", {
+      const response = await axios.post("/login", {
         username,
         password,
       });
-      if (response.data){
-        props.setLoggedIn(true)
+      if (response.data) {
+        props.setLoggedIn(true);
         // console.log(response.data)
-        localStorage.setItem("socialMediaUsername", response.data.username)
-        localStorage.setItem("socialMediaAvatar", response.data.avatar)
-        localStorage.setItem("socialMediatoken", response.data.token)
-      } else{
-        console.log("invalid username or password")
+        localStorage.setItem("socialMediaUsername", response.data.username);
+        localStorage.setItem("socialMediaAvatar", response.data.avatar);
+        localStorage.setItem("socialMediatoken", response.data.token);
+      } else {
+        console.log("invalid username or password");
       }
     } catch (e) {
       console.error(e);

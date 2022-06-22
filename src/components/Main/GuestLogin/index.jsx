@@ -6,7 +6,7 @@ function Main() {
   async function handleSubmit(e) {
     e.preventDefault()
     try {
-      await Axios.post("http://localhost:8080/register", { username: userName, email, password })
+      await Axios.post("/register", { username: userName, email, password })
       console.log("User was successfully created.")
     } catch (e) {
       console.log(e.response.data)
