@@ -8,6 +8,7 @@ import CreatePost from "./components/main/CreatePost/index.jsx"
 import LoggedInNoPosts from "./components/main/LoggedInNoPosts/index.jsx"
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Axios from "axios"
+import ViewPosts from "./components/main/ViewPosts";
 Axios.defaults.baseURL = "http://localhost:8080"
 
 function App() {
@@ -19,6 +20,7 @@ function App() {
         <Route path="/" exact element={loggedIn ? <LoggedInNoPosts/> : <GuestLogin/>}/>
         <Route path="/about" element={<About/>}/>
         <Route path="/terms" element={<Terms/>}/>  
+        <Route path="/posts/:id" element={<ViewPosts/>}/>  
         <Route path="/create-post" element={loggedIn ? <CreatePost/> : <GuestLogin/>}/>  
       </Routes>
       <Footer />

@@ -1,20 +1,24 @@
 import React, { useState } from "react";
 import Container from "../Container/index";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 function CreatePost() {
   const [title, setTitle] = useState();
   const [body, setBody] = useState();
+  const navigate = useNavigate();
 
   function handleSubmit(e) {
     e.preventDefault();
     try {
-      axios.post("/create-post", {
+      const newPost = axios.post("/create-post", {
         title,
         body,
         token: localStorage.getItem("socialMediatoken"),
-      });
+      }).then((newPost) => {
       console.log("post has been created");
+      // console.log(newPost);
+      navigate(`/posts/${newPost.data}`);})
     } catch (e) {
       console.log(e);
     }
