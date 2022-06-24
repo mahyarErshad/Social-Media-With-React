@@ -1,9 +1,11 @@
-import React from "react";
+import React, { useContext } from "react";
 import { Link } from "react-router-dom";
+import MyContext from "../../../MyContext";
 
-function HeaderLoggedIn(props) {
+function HeaderLoggedIn() {
+  const { setLoggedIn } = useContext(MyContext);
   function handleSignOut() {
-    props.setLoggedIn(false);
+    setLoggedIn(false);
     localStorage.removeItem("socialMediaUsername");
     localStorage.removeItem("socialMediaAvatar");
     localStorage.removeItem("socialMediatoken");

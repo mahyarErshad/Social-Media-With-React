@@ -1,9 +1,11 @@
-import React from "react";
+import React, { useContext } from "react";
 import { Link } from "react-router-dom";
+import MyContext from "../../MyContext.jsx";
 import HeaderLoggedIn from "./HeaderLoggedIn/index.jsx";
-import HeaderLoggedOut from "./HeaderLoggedOut/index.jsx"
+import HeaderLoggedOut from "./HeaderLoggedOut/index.jsx";
 
-function Header(props) {
+function Header() {
+  const { loggedIn } = useContext(MyContext);
 
   return (
     <>
@@ -14,7 +16,7 @@ function Header(props) {
               React Social Media
             </Link>
           </h4>
-          {props.loggedIn ? <HeaderLoggedIn setLoggedIn={props.setLoggedIn}/> : <HeaderLoggedOut setLoggedIn={props.setLoggedIn}/>}
+          {loggedIn ? <HeaderLoggedIn /> : <HeaderLoggedOut />}
         </div>
       </header>
     </>

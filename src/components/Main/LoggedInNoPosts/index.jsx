@@ -3,7 +3,7 @@ import Container from "../Container";
 
 function LoggedInNoPosts() {
   return (
-    <Container>
+    <Container title={"Welcome"}>
       <h2 className="text-center">
         Hello <strong>{localStorage.getItem("socialMediaUsername")}</strong>, your feed is empty.
       </h2>

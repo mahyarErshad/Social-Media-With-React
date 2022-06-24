@@ -1,22 +1,24 @@
-import React, { useState } from "react";
-import Container from "../Container/index";
+import React, { useContext, useState } from "react";
+import Container from "../Container/";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import MyContext from "../../../MyContext";
 
 function CreatePost() {
   const [title, setTitle] = useState();
   const [body, setBody] = useState();
   const navigate = useNavigate();
+  const {addFlashMessages} = useContext(MyContext);
 
   function handleSubmit(e) {
     e.preventDefault();
     try {
-      const newPost = axios.post("/create-post", {
+      axios.post("/create-post", {
         title,
         body,
         token: localStorage.getItem("socialMediatoken"),
       }).then((newPost) => {
-      console.log("post has been created");
+      addFlashMessages("You have successfully created a post!");
       // console.log(newPost);
       navigate(`/posts/${newPost.data}`);})
     } catch (e) {
@@ -25,7 +27,7 @@ function CreatePost() {
   }
 
   return (
-    <Container title={"Create new post"}>
+    <Container title={"Create New Post"}>
       <form onSubmit={handleSubmit}>
         <div className="form-group">
           <label htmlFor="post-title" className="text-muted mb-1">

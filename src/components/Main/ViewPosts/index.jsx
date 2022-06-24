@@ -3,7 +3,7 @@ import Container from "../Container";
 
 function ViewPosts() {
   return (
-    <Container title={"test"}>
+    <Container title={"Posts"}>
       <div className="d-flex justify-content-between">
         <h2>Example Post Title</h2>
         <span className="pt-2">

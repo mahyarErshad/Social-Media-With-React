@@ -1,7 +1,9 @@
 import axios from "axios";
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
+import MyContext from "../../../MyContext";
 
-function HeaderLoggedOut(props) {
+function HeaderLoggedOut() {
+  const { setLoggedIn } = useContext(MyContext);
   async function handleSubmit(e) {
     e.preventDefault();
     try {
@@ -10,7 +12,7 @@ function HeaderLoggedOut(props) {
         password,
       });
       if (response.data) {
-        props.setLoggedIn(true);
+        setLoggedIn(true);
         // console.log(response.data)
         localStorage.setItem("socialMediaUsername", response.data.username);
         localStorage.setItem("socialMediaAvatar", response.data.avatar);
