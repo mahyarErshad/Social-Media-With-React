@@ -29,11 +29,14 @@ function App() {
   function ourReducer(draft, action) {
     switch (action.type) {
       case "loggedIn":
-        return draft.loggedIn = true;
+        draft.loggedIn = true;
+        return;
       case "loggedOut":
-        return draft.loggedIn = false;
+        draft.loggedIn = false;
+        return;
       case "flashMessages":
-        return draft.flashMessages.push(action.value);
+        draft.flashMessages.push(action.value);
+        return;
       default:
         return state;
     }
