@@ -1,26 +1,26 @@
 import React, { useContext } from "react";
 import { Link } from "react-router-dom";
-import MyContext from "../../../MyContext";
+import DispatchContext from "../../../Context/DispatchContext";
 
 function HeaderLoggedIn() {
-  const { setLoggedIn } = useContext(MyContext);
+  const globalDispatch = useContext(DispatchContext);
   function handleSignOut() {
-    setLoggedIn(false);
+    globalDispatch({ type: "loggedOut" });
     localStorage.removeItem("socialMediaUsername");
     localStorage.removeItem("socialMediaAvatar");
     localStorage.removeItem("socialMediatoken");
   }
   return (
     <div className="flex-row my-3 my-md-0">
-      <a href="#" className="text-white mr-2 header-search-icon">
+      <a href="#http://localhost:3000/" className="text-white mr-2 header-search-icon">
         <i className="fas fa-search"></i>
       </a>
       <span className="mr-2 header-chat-icon text-white">
         <i className="fas fa-comment"></i>
         <span className="chat-count-badge text-white"> </span>
       </span>
-      <a href="#" className="mr-2">
-        <img className="small-header-avatar" src={localStorage.getItem("socialMediaAvatar")} />
+      <a href="http://localhost:3000/" className="mr-2">
+        <img className="small-header-avatar" src={localStorage.getItem("socialMediaAvatar")} alt={"avatar"} />
       </a>
       <Link className="btn btn-sm btn-success mr-2" to="/create-post">
         Create Post

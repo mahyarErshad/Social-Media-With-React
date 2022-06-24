@@ -2,25 +2,28 @@ import React, { useContext, useState } from "react";
 import Container from "../Container/";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
-import MyContext from "../../../MyContext";
+import DispatchContext from "../../../Context/DispatchContext";
 
 function CreatePost() {
+  const globalDispatch = useContext(DispatchContext);
   const [title, setTitle] = useState();
   const [body, setBody] = useState();
   const navigate = useNavigate();
-  const {addFlashMessages} = useContext(MyContext);
 
   function handleSubmit(e) {
     e.preventDefault();
     try {
-      axios.post("/create-post", {
-        title,
-        body,
-        token: localStorage.getItem("socialMediatoken"),
-      }).then((newPost) => {
-      addFlashMessages("You have successfully created a post!");
-      // console.log(newPost);
-      navigate(`/posts/${newPost.data}`);})
+      axios
+        .post("/create-post", {
+          title,
+          body,
+          token: localStorage.getItem("socialMediatoken"),
+        })
+        .then((newPost) => {
+          globalDispatch({ type: "flashMessages", value: "You have successfully created a post" });
+          // console.log(newPost);
+          navigate(`/posts/${newPost.data}`);
+        });
     } catch (e) {
       console.log(e);
     }

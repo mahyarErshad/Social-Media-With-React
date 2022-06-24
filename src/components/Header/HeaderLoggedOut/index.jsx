@@ -1,9 +1,9 @@
 import axios from "axios";
 import React, { useContext, useState } from "react";
-import MyContext from "../../../MyContext";
+import DispatchContext from "../../../Context/DispatchContext";
 
 function HeaderLoggedOut() {
-  const { setLoggedIn } = useContext(MyContext);
+  const globalDispatch = useContext(DispatchContext);
   async function handleSubmit(e) {
     e.preventDefault();
     try {
@@ -12,7 +12,7 @@ function HeaderLoggedOut() {
         password,
       });
       if (response.data) {
-        setLoggedIn(true);
+        globalDispatch({ type: "loggedIn" });
         // console.log(response.data)
         localStorage.setItem("socialMediaUsername", response.data.username);
         localStorage.setItem("socialMediaAvatar", response.data.avatar);
