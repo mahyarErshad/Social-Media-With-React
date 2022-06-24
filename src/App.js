@@ -1,4 +1,4 @@
-import React, { useReducer } from "react";
+import React from "react";
 
 //components
 import Header from "./components/Header";
@@ -18,6 +18,7 @@ import StateContext from "./Context/StateContext";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Axios from "axios";
 import FlashMesaages from "./components/FlashMesaages/FlashMesaages";
+import { useImmerReducer } from "use-immer";
 Axios.defaults.baseURL = "http://localhost:8080";
 
 function App() {
@@ -25,19 +26,19 @@ function App() {
     loggedIn: Boolean(localStorage.getItem("socialMediatoken")),
     flashMessages: [],
   };
-  function ourReducer(state, action) {
+  function ourReducer(draft, action) {
     switch (action.type) {
       case "loggedIn":
-        return { loggedIn: true, flashMessages: state.flashMessages };
+        return draft.loggedIn = true;
       case "loggedOut":
-        return { loggedIn: false, flashMessages: state.flashMessages };
+        return draft.loggedIn = false;
       case "flashMessages":
-        return { loggedIn: state.loggedIn, flashMessages: state.flashMessages.concat(action.value) };
+        return draft.flashMessages.push(action.value);
       default:
         return state;
     }
   }
-  const [state, dispatch] = useReducer(ourReducer, initialState);
+  const [state, dispatch] = useImmerReducer(ourReducer, initialState);
 
   return (
     <StateContext.Provider value={state}>
