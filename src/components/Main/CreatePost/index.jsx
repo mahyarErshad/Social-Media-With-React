@@ -3,9 +3,11 @@ import Container from "../Container/";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import DispatchContext from "../../../Context/DispatchContext";
+import StateContext from "../../../Context/StateContext";
 
 function CreatePost() {
   const globalDispatch = useContext(DispatchContext);
+  const globalState = useContext(StateContext);
   const [title, setTitle] = useState();
   const [body, setBody] = useState();
   const navigate = useNavigate();
@@ -17,7 +19,7 @@ function CreatePost() {
         .post("/create-post", {
           title,
           body,
-          token: localStorage.getItem("socialMediatoken"),
+          token: globalState.user.token,
         })
         .then((newPost) => {
           globalDispatch({ type: "flashMessages", value: "You have successfully created a post" });

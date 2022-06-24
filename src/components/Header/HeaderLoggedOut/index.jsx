@@ -12,11 +12,9 @@ function HeaderLoggedOut() {
         password,
       });
       if (response.data) {
-        globalDispatch({ type: "loggedIn" });
+        globalDispatch({ type: "loggedIn" , data: response.data });
         // console.log(response.data)
-        localStorage.setItem("socialMediaUsername", response.data.username);
-        localStorage.setItem("socialMediaAvatar", response.data.avatar);
-        localStorage.setItem("socialMediatoken", response.data.token);
+        
       } else {
         console.log("invalid username or password");
       }

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 
 //components
 import Header from "./components/Header";
@@ -25,11 +25,17 @@ function App() {
   const initialState = {
     loggedIn: Boolean(localStorage.getItem("socialMediatoken")),
     flashMessages: [],
+    user: {
+      username: localStorage.getItem("socialMediaUsername"),
+      avatar: localStorage.getItem("socialMediaAvatar"),
+      token: localStorage.getItem("socialMediatoken"),
+    },
   };
   function ourReducer(draft, action) {
     switch (action.type) {
       case "loggedIn":
         draft.loggedIn = true;
+        draft.user = action.data;
         return;
       case "loggedOut":
         draft.loggedIn = false;
@@ -42,6 +48,18 @@ function App() {
     }
   }
   const [state, dispatch] = useImmerReducer(ourReducer, initialState);
+
+  useEffect(() => {
+    if (state.loggedIn) {
+      localStorage.setItem("socialMediaUsername", state.user.username);
+      localStorage.setItem("socialMediaAvatar", state.user.avatar);
+      localStorage.setItem("socialMediatoken", state.user.token);
+    } else {
+      localStorage.removeItem("socialMediaUsername");
+      localStorage.removeItem("socialMediaAvatar");
+      localStorage.removeItem("socialMediatoken");
+    } // eslint-disable-next-line
+  }, [state.loggedIn]);
 
   return (
     <StateContext.Provider value={state}>
