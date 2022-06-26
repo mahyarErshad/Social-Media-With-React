@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from "react";
-import { useParams , Link } from "react-router-dom";
+import { useParams, Link } from "react-router-dom";
 import axios from "axios";
+import Loading from "../../Loading";
+import Container from "../../Container";
 
 function ProfilePosts() {
   const [isLoading, setIsLoading] = useState(true);
@@ -23,13 +25,18 @@ function ProfilePosts() {
     [isLoading]
   );
 
-  if (isLoading) return <div>Loading...</div>;
+  if (isLoading)
+    return (
+      <Container title={"loading"}>
+        <Loading />
+      </Container>
+    );
 
   return (
     <div className="list-group">
       {posts.map((post) => {
-        const date = new Date(post.createdDate)
-        const formattedDate = ` ${date.getDate()}/${date.getMonth() + 1}/${date.getFullYear()}`
+        const date = new Date(post.createdDate);
+        const formattedDate = ` ${date.getDate()}/${date.getMonth() + 1}/${date.getFullYear()}`;
         return (
           <Link key={post._id} to={`/post/${post._id}`} className="list-group-item list-group-item-action">
             <img className="avatar-tiny" src={post.author.avatar} alt="avatar" /> <strong>{post.title}</strong> {`\t`}

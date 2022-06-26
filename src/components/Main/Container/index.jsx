@@ -4,7 +4,7 @@ function Container(props) {
   useEffect(() => {
     document.title = props.title;
     window.scrollTo(0, 0);
-  });
+  } , [props.title]);
   return <div className={"container py-md-5 " + (props.wide ? "" : "container--narrow")}>{props.children}</div>;
 }
 

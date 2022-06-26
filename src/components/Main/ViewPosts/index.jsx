@@ -1,11 +1,42 @@
-import React from "react";
+import axios from "axios";
+import React, { useEffect, useState } from "react";
+import { useParams, Link } from "react-router-dom";
 import Container from "../Container";
+import Loading from "../Loading"
 
 function ViewPosts() {
+  const [isLoading, setIsLoading] = useState(true);
+  const [post, setPost] = useState([]);
+  const { id } = useParams();
+
+  useEffect(
+    () => {
+      async function fetchData() {
+        try {
+          const response = await axios.get(`/post/${id}`);
+          setIsLoading(false);
+          setPost(response.data);
+        } catch (e) {
+          console.log(e);
+        }
+      }
+      fetchData();
+    }, // eslint-disable-next-line
+    [isLoading]
+  );
+
+  if (isLoading)
+    return (
+      <Container title={"loading"}>
+        <Loading />
+      </Container>
+    );
+  const date = new Date(post.createdDate);
+  const formattedDate = ` ${date.getDate()}/${date.getMonth() + 1}/${date.getFullYear()}`;
   return (
-    <Container title={"Posts"}>
+    <Container title={post.title}>
       <div className="d-flex justify-content-between">
-        <h2>Example Post Title</h2>
+        <h2>{post.title}</h2>
         <span className="pt-2">
           <a href="http://localhost:3000/" className="text-primary mr-2" title="Edit">
             <i className="fas fa-edit"></i>
@@ -17,18 +48,13 @@ function ViewPosts() {
       </div>
 
       <p className="text-muted small mb-4">
-        <a href="http://localhost:3000/">
-          <img className="avatar-tiny" src="https://gravatar.com/avatar/b9408a09298632b5151200f3449434ef?s=128" alt="avatar" />
-        </a>
-        Posted by <a href="http://localhost:3000/">brad</a> on 2/10/2020
+        <Link to={`/profile/${post.author.username}`}>
+          <img className="avatar-tiny" src={post.author.avatar} alt="avatar" />
+        </Link>
+        Posted by <Link to={`/profile/${post.author.username}`}>{post.author.username}</Link> {formattedDate}
       </p>
 
-      <div className="body-content">
-        <p>
-          Lorem ipsum dolor sit <strong>example</strong> post adipisicing elit. Iure ea at esse, tempore qui possimus soluta impedit natus voluptate, sapiente saepe modi est pariatur. Aut voluptatibus aspernatur fugiat asperiores at.
-        </p>
-        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Beatae quod asperiores corrupti omnis qui, placeat neque modi, dignissimos, ab exercitationem eligendi culpa explicabo nulla tempora rem? Lorem ipsum dolor sit amet consectetur adipisicing elit. Iure ea at esse, tempore qui possimus soluta impedit natus voluptate, sapiente saepe modi est pariatur. Aut voluptatibus aspernatur fugiat asperiores at.</p>
-      </div>
+      <div className="body-content">{post.body}</div>
     </Container>
   );
 }
