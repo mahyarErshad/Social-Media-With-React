@@ -6,6 +6,7 @@ import Footer from "./components/Footer";
 import GuestLogin from "./components/main/GuestLogin/index.jsx";
 import About from "./components/main/About/index.jsx";
 import Terms from "./components/main/Terms/index.jsx";
+import Profile from "./components/main/Profile/index.jsx";
 import CreatePost from "./components/main/CreatePost/index.jsx";
 import LoggedInNoPosts from "./components/main/LoggedInNoPosts/index.jsx";
 import ViewPosts from "./components/main/ViewPosts";
@@ -71,7 +72,8 @@ function App() {
             <Route path="/" exact element={state.loggedIn ? <LoggedInNoPosts /> : <GuestLogin />} />
             <Route path="/about" element={<About />} />
             <Route path="/terms" element={<Terms />} />
-            <Route path="/posts/:id" element={<ViewPosts />} />
+            <Route path="/profile/:username" element={<Profile />} />
+            <Route path="/post/:id" element={<ViewPosts />} />
             <Route path="/create-post" element={state.loggedIn ? <CreatePost /> : <GuestLogin />} />
           </Routes>
           <Footer />
