@@ -17,15 +17,19 @@ function Profile() {
 
   useEffect(
     () => {
+      const ourRequest = axios.CancelToken.source();
       async function fetchData() {
         try {
-          const response = await axios.post(`/profile/${username}`, { token: globalState.user.token });
+          const response = await axios.post(`/profile/${username}`, { token: globalState.user.token }, { cancelToken: ourRequest.token });
           setProfileData(response.data);
         } catch (e) {
           console.log(e);
         }
       }
       fetchData();
+      return () => {
+        ourRequest.cancel();
+      };
     }, // eslint-disable-next-line
     []
   );

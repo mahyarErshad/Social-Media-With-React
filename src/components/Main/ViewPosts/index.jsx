@@ -2,7 +2,7 @@ import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { useParams, Link } from "react-router-dom";
 import Container from "../Container";
-import Loading from "../Loading"
+import Loading from "../Loading";
 
 function ViewPosts() {
   const [isLoading, setIsLoading] = useState(true);
@@ -11,9 +11,10 @@ function ViewPosts() {
 
   useEffect(
     () => {
+      const cancelRequest = axios.CancelToken.source();
       async function fetchData() {
         try {
-          const response = await axios.get(`/post/${id}`);
+          const response = await axios.get(`/post/${id}`, { cancelToken: cancelRequest.token });
           setIsLoading(false);
           setPost(response.data);
         } catch (e) {
@@ -21,6 +22,9 @@ function ViewPosts() {
         }
       }
       fetchData();
+      return () => {
+        cancelRequest.cancel();
+      };
     }, // eslint-disable-next-line
     [isLoading]
   );

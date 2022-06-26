@@ -11,9 +11,10 @@ function ProfilePosts() {
 
   useEffect(
     () => {
+      const ourRequest = axios.CancelToken.source();
       async function fetchData() {
         try {
-          const response = await axios.get(`/profile/${username}/posts`);
+          const response = await axios.get(`/profile/${username}/posts`, { cancelToken: ourRequest.token });
           setIsLoading(false);
           setPosts(response.data);
         } catch (e) {
@@ -21,6 +22,9 @@ function ProfilePosts() {
         }
       }
       fetchData();
+      return () => {
+        ourRequest.cancel();
+      };
     }, // eslint-disable-next-line
     [isLoading]
   );
