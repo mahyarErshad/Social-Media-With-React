@@ -24,7 +24,7 @@ function CreatePost() {
         .then((newPost) => {
           globalDispatch({ type: "flashMessages", value: "You have successfully created a post" });
           // console.log(newPost);
-          navigate(`/posts/${newPost.data}`);
+          navigate(`/post/${newPost.data}`);
         });
     } catch (e) {
       console.log(e);
