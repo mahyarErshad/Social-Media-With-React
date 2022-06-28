@@ -10,6 +10,7 @@ import Profile from "./components/main/Profile/index.jsx";
 import CreatePost from "./components/main/CreatePost/index.jsx";
 import LoggedInNoPosts from "./components/main/LoggedInNoPosts/index.jsx";
 import ViewPosts from "./components/main/ViewPosts";
+import EditPost from "./components/main/EditPost";
 
 //contexts
 import DispatchContext from "./Context/DispatchContext";
@@ -74,6 +75,7 @@ function App() {
             <Route path="/terms" element={<Terms />} />
             <Route path="/profile/:username" element={<Profile />} />
             <Route path="/post/:id" element={<ViewPosts />} />
+            <Route path="/post/:id/edit" element={<EditPost />} />
             <Route path="/create-post" element={state.loggedIn ? <CreatePost /> : <GuestLogin />} />
           </Routes>
           <Footer />

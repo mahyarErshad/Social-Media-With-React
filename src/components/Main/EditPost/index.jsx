@@ -1,10 +1,11 @@
 import axios from "axios";
 import React, { useContext, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { useImmerReducer } from "use-immer";
 import DispatchContext from "../../../Context/DispatchContext";
 import StateContext from "../../../Context/StateContext";
 import Container from "../Container";
+import Loading from "../Loading";
 
 function EditPost() {
   const globalState = useContext(StateContext);
@@ -21,16 +22,24 @@ function EditPost() {
       hasError: false,
       message: "",
     },
-    submitting: false,
+    isFetching: true,
+    isSaving: false,
+    id: useParams().id,
     sendCounts: 0,
   };
   const ourReducer = (draft, action) => {
     switch (action.type) {
-      case "setTitle":
+      case "fetchIsComplete":
+        draft.title.value = action.value.title;
+        draft.body.value = action.value.body;
+        draft.isFetching = false;
+        return;
+
+      case "changeTitle":
         draft.title.value = action.value;
         draft.title.hasError = false;
         return;
-      case "setBody":
+      case "changeBody":
         draft.body.value = action.value;
         draft.body.hasError = false;
         return;
@@ -39,8 +48,8 @@ function EditPost() {
           draft.sendCounts++;
         }
         return;
-      case "submitting":
-        draft.submitting = !draft.submitting;
+      case "changeIsSaving":
+        draft.isSaving = !draft.isSaving;
         return;
       case "blankTitle":
         if (!action.value.trim()) {
@@ -64,23 +73,44 @@ function EditPost() {
 
   useEffect(
     () => {
+      const cancelRequest = axios.CancelToken.source();
+      async function fetchData() {
+        try {
+          const response = await axios.get(`/post/${state.id}`, { cancelToken: cancelRequest.token });
+          dispatch({
+            type: "fetchIsComplete",
+            value: response.data,
+          });
+        } catch (e) {
+          console.log(e);
+        }
+      }
+      fetchData();
+      return () => {
+        cancelRequest.cancel();
+      };
+    }, // eslint-disable-next-line
+    [state.isFetching]
+  );
+  useEffect(
+    () => {
       if (state.sendCounts > 0) {
-        dispatch({ type: "submitting" });
+        dispatch({ type: "changeIsSaving" });
         const cancelRequest = axios.CancelToken.source();
         async function fetchData() {
           try {
-            await axios
-              .post("/create-post", {
+            await axios.post(
+              `/post/${state.id}/edit`,
+              {
                 title: state.title.value,
                 body: state.body.value,
                 token: globalState.user.token,
-              })
-              .then((newPost) => {
-                dispatch({ type: "submitting" });
-                globalDispatch({ type: "flashMessages", value: "You have successfully created a post" });
-                // console.log(newPost);
-                navigate(`/post/${newPost.data}`);
-              });
+              },
+              { cancelToken: cancelRequest.token }
+            );
+            dispatch({ type: "changeIsSaving" });
+            globalDispatch({ type: "flashMessages", value: "Post updated successfully!" });
+            navigate(`/post/${state.id}`);
           } catch (e) {
             console.log(e);
           }
@@ -101,14 +131,20 @@ function EditPost() {
     dispatch({ type: "submitHandler" });
   };
 
+  if (state.isFetching)
+    return (
+      <Container title={"loading"}>
+        <Loading />
+      </Container>
+    );
   return (
-    <Container title={"Create Post"}>
+    <Container title={"Edit Post"}>
       <form onSubmit={handleSubmit}>
         <div className="form-group">
           <label htmlFor="post-title" className="text-muted mb-1">
             <small>Title</small>
           </label>
-          <input onBlur={(e) => dispatch({ type: "blankTitle", value: e.target.value })} value={state.title.value} onChange={(e) => dispatch({ type: "setTitle", value: e.target.value })} autoFocus name="title" id="post-title" className="form-control form-control-lg form-control-title" type="text" placeholder="" autoComplete="off" />
+          <input onBlur={(e) => dispatch({ type: "blankTitle", value: e.target.value })} value={state.title.value} onChange={(e) => dispatch({ type: "changeTitle", value: e.target.value })} autoFocus name="title" id="post-title" className="form-control form-control-lg form-control-title" type="text" placeholder="" autoComplete="off" />
           {state.title.hasError && <div className="alert alert-danger small liveValidateMessage">{state.title.message}</div>}
         </div>
 
@@ -116,12 +152,12 @@ function EditPost() {
           <label htmlFor="post-body" className="text-muted mb-1 d-block">
             <small>Body Content</small>
           </label>
-          <textarea onBlur={(e) => dispatch({ type: "blankBody", value: e.target.value })} name="body" id="post-body" className="body-content tall-textarea form-control" type="text" value={state.body.value} onChange={(e) => dispatch({ type: "setBody", value: e.target.value })} />
+          <textarea onBlur={(e) => dispatch({ type: "blankBody", value: e.target.value })} name="body" id="post-body" className="body-content tall-textarea form-control" type="text" value={state.body.value} onChange={(e) => dispatch({ type: "changeBody", value: e.target.value })} />
           {state.body.hasError && <div className="alert alert-danger small liveValidateMessage">{state.body.message}</div>}
         </div>
 
-        <button className="btn btn-primary" disabled={state.submitting}>
-          {state.submitting ? "..." : "Create Post"}
+        <button className="btn btn-primary" disabled={state.isSaving}>
+          {state.isSaving ? "Updating" : "Update Post"}
         </button>
       </form>
     </Container>

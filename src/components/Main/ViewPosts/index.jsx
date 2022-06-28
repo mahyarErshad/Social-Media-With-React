@@ -44,9 +44,9 @@ function ViewPosts() {
       <div className="d-flex justify-content-between">
         <h2>{post.title}</h2>
         <span className="pt-2">
-          <a href="http://localhost:3000/" data-tip="Edit the post" data-for="edit" className="text-primary mr-2">
+          <Link to={`/post/${id}/edit`} data-tip="Edit the post" data-for="edit" className="text-primary mr-2">
             <i className="fas fa-edit"></i>
-          </a>
+          </Link>
           <ReactTooltip id="edit" className="custom-tooltip" />
           <a href="http://localhost:3000/" data-tip="Delete the post" data-for="delete" className="delete-post-button text-danger">
             <i className="fas fa-trash"></i>
