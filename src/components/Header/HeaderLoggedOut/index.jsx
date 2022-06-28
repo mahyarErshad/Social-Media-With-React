@@ -12,9 +12,8 @@ function HeaderLoggedOut() {
         password,
       });
       if (response.data) {
-        globalDispatch({ type: "loggedIn" , data: response.data });
+        globalDispatch({ type: "loggedIn", data: response.data });
         // console.log(response.data)
-        
       } else {
         console.log("invalid username or password");
       }
@@ -34,7 +33,7 @@ function HeaderLoggedOut() {
           <input onChange={(e) => setpassword(e.target.value)} name="password" className="form-control form-control-sm input-dark" type="password" placeholder="Password" />
         </div>
         <div className="col-md-auto">
-          <button className="btn btn-success btn-sm">Sign In</button>
+          <button className="btn btn-dark btn-sm">Sign In</button>
         </div>
       </div>
     </form>

@@ -4,12 +4,12 @@ import Axios from "axios";
 
 function Main() {
   async function handleSubmit(e) {
-    e.preventDefault()
+    e.preventDefault();
     try {
-      await Axios.post("/register", { username: userName, email, password })
-      console.log("User was successfully created.")
+      await Axios.post("/register", { username: userName, email, password });
+      console.log("User was successfully created.");
     } catch (e) {
-      console.log(e.response.data)
+      console.log(e.response.data);
     }
   }
 
@@ -21,8 +21,8 @@ function Main() {
     <Container wide={true} title={"Social Media"}>
       <div className="row align-items-center">
         <div className="col-lg-7 py-3 py-md-5">
-          <h1 className="display-3">Remember Writing?</h1>
-          <p className="lead text-muted">Are you sick of short tweets and impersonal &ldquo;shared&rdquo; posts that are reminiscent of the late 90&rsquo;s email forwards? We believe getting back to actually writing is the key to enjoying the internet again.</p>
+          <h1 className="display-3">Not a member yet?</h1>
+          <p className="lead text-muted">You can create an account easily to start posting new content and follow people to make friends.</p>
         </div>
         <div className="col-lg-5 pl-lg-5 pb-3 py-lg-5">
           <form onSubmit={handleSubmit}>
@@ -44,7 +44,7 @@ function Main() {
               </label>
               <input onChange={(e) => setPassword(e.target.value)} id="password-register" name="password" className="form-control" type="password" placeholder="Create a password" />
             </div>
-            <button type="submit" className="py-3 mt-4 btn btn-lg btn-success btn-block">
+            <button type="submit" className="py-3 mt-4 btn btn-lg btn-dark btn-block">
               Sign up
             </button>
           </form>

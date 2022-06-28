@@ -1,10 +1,11 @@
 import axios from "axios";
 import React, { useContext, useEffect } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import { useImmerReducer } from "use-immer";
 import DispatchContext from "../../../Context/DispatchContext";
 import StateContext from "../../../Context/StateContext";
 import Container from "../Container";
+import FOF from "../FOF";
 import Loading from "../Loading";
 
 function EditPost() {
@@ -26,6 +27,7 @@ function EditPost() {
     isSaving: false,
     id: useParams().id,
     sendCounts: 0,
+    FOF: false,
   };
   const ourReducer = (draft, action) => {
     switch (action.type) {
@@ -63,6 +65,9 @@ function EditPost() {
           draft.body.message = "You must write something";
         }
         return;
+      case "FOF":
+        draft.FOF = true;
+        return;
 
       default:
         return;
@@ -77,10 +82,16 @@ function EditPost() {
       async function fetchData() {
         try {
           const response = await axios.get(`/post/${state.id}`, { cancelToken: cancelRequest.token });
-          dispatch({
-            type: "fetchIsComplete",
-            value: response.data,
-          });
+          if (response.data.title) {
+            dispatch({
+              type: "fetchIsComplete",
+              value: response.data,
+            });
+          } else {
+            dispatch({
+              type: "FOF",
+            });
+          }
         } catch (e) {
           console.log(e);
         }
@@ -131,6 +142,10 @@ function EditPost() {
     dispatch({ type: "submitHandler" });
   };
 
+  if (state.FOF)
+    return (
+        <FOF />
+    );
   if (state.isFetching)
     return (
       <Container title={"loading"}>
@@ -139,7 +154,10 @@ function EditPost() {
     );
   return (
     <Container title={"Edit Post"}>
-      <form onSubmit={handleSubmit}>
+      <Link className="small font-weight-bold" to={`/post/${state.id}`}>
+        &laquo; Back
+      </Link>
+      <form className="mt-3" onSubmit={handleSubmit}>
         <div className="form-group">
           <label htmlFor="post-title" className="text-muted mb-1">
             <small>Title</small>

@@ -21,10 +21,10 @@ function HeaderLoggedIn() {
       <Link to={`/profile/${globalState.user.username}`} className="mr-2">
         <img className="small-header-avatar" src={globalState.user.avatar} alt={"avatar"} />
       </Link>
-      <Link className="btn btn-sm btn-success mr-2" to="/create-post">
+      <Link className="btn btn-sm btn-dark mr-2" to="/create-post">
         Create Post
       </Link>
-      <button onClick={handleSignOut} className="btn btn-sm btn-secondary">
+      <button onClick={handleSignOut} className="btn btn-sm btn-dark">
         Sign Out
       </button>
     </div>
