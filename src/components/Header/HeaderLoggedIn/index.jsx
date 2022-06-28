@@ -24,7 +24,7 @@ function HeaderLoggedIn() {
       <Link className="btn btn-sm btn-dark mr-2" to="/create-post">
         Create Post
       </Link>
-      <button onClick={handleSignOut} className="btn btn-sm btn-dark">
+      <button onClick={handleSignOut} className="btn btn-sm btn-danger">
         Sign Out
       </button>
     </div>

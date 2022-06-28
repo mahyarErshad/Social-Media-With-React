@@ -69,12 +69,12 @@ body {
   .input-dark {
     background-color: #fff;
     border-color: transparent;
-    color: #444
+    color: #343A40;
   }
   
   .input-dark:focus {
     color: #ffffff;
-    background-color: #555;
+    background-color: #343A40;
     border-color: #80bdff;
     outline: 0;
     box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
