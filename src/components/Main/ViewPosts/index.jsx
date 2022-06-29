@@ -1,12 +1,13 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import ReactMarkdown from "react-markdown";
-import { useParams, Link } from "react-router-dom";
+import { useParams, Link, useNavigate } from "react-router-dom";
 import ReactTooltip from "react-tooltip";
 import Container from "../Container";
 import Loading from "../Loading";
 import FOF from "../FOF";
 import StateContext from "../../../Context/StateContext";
+import DispatchContext from "../../../Context/DispatchContext";
 
 function ViewPosts() {
   const [isLoading, setIsLoading] = useState(true);
@@ -15,6 +16,8 @@ function ViewPosts() {
   const { id } = useParams();
 
   const globalState = React.useContext(StateContext);
+  const globalDispatch = React.useContext(DispatchContext);
+  const navigate = useNavigate();
 
   useEffect(
     () => {
@@ -51,10 +54,28 @@ function ViewPosts() {
   const formattedDate = ` ${date.getDate()}/${date.getMonth() + 1}/${date.getFullYear()}`;
 
   function handleBtn() {
-    if (globalState.user.username === post.author.username) {
+    if (globalState.user.username === post.author.username && globalState.loggedIn) {
       return true;
     } else {
       return false;
+    }
+  }
+  async function deleteHandler() {
+    const userConfirmation = window.confirm("Are you sure you want to delete this post?");
+    if (userConfirmation) {
+      try {
+        const response = await axios.delete(`/post/${id}`, { data: { token: globalState.user.token } });
+        if (response.data === "Success") {
+          globalDispatch({ type: "flashMessages", value: "Post has been deleted successfully" });
+          navigate(`/profile/${globalState.user.username}`);
+        } else {
+          globalDispatch({ type: "flashMessages", value: "Something went wrong. Please try again." });
+        }
+      } catch (e) {
+        console.log(e);
+      }
+    } else {
+      return;
     }
   }
 
@@ -69,9 +90,9 @@ function ViewPosts() {
                 <i className="fas fa-edit"></i>
               </Link>
               <ReactTooltip id="edit" className="custom-tooltip" />
-              <a href="http://localhost:3000/" data-tip="Delete the post" data-for="delete" className="delete-post-button text-danger">
+              <button onClick={deleteHandler} data-tip="Delete the post" data-for="delete" className="delete-post-button text-danger">
                 <i className="fas fa-trash"></i>
-              </a>
+              </button>
               <ReactTooltip id="delete" className="custom-tooltip" />
             </>
           )}
