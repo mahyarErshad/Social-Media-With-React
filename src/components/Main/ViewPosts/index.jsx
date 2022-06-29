@@ -6,12 +6,15 @@ import ReactTooltip from "react-tooltip";
 import Container from "../Container";
 import Loading from "../Loading";
 import FOF from "../FOF";
+import StateContext from "../../../Context/StateContext";
 
 function ViewPosts() {
   const [isLoading, setIsLoading] = useState(true);
   const [notFound, setNotFound] = useState(false);
   const [post, setPost] = useState([]);
   const { id } = useParams();
+
+  const globalState = React.useContext(StateContext);
 
   useEffect(
     () => {
@@ -46,19 +49,32 @@ function ViewPosts() {
     );
   const date = new Date(post.createdDate);
   const formattedDate = ` ${date.getDate()}/${date.getMonth() + 1}/${date.getFullYear()}`;
+
+  function handleBtn() {
+    if (globalState.user.username === post.author.username) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
   return (
     <Container title={post.title}>
       <div className="d-flex justify-content-between">
         <h2>{post.title}</h2>
         <span className="pt-2">
-          <Link to={`/post/${id}/edit`} data-tip="Edit the post" data-for="edit" className="text-primary mr-2">
-            <i className="fas fa-edit"></i>
-          </Link>
-          <ReactTooltip id="edit" className="custom-tooltip" />
-          <a href="http://localhost:3000/" data-tip="Delete the post" data-for="delete" className="delete-post-button text-danger">
-            <i className="fas fa-trash"></i>
-          </a>
-          <ReactTooltip id="delete" className="custom-tooltip" />
+          {handleBtn() && (
+            <>
+              <Link to={`/post/${id}/edit`} data-tip="Edit the post" data-for="edit" className="text-primary mr-2">
+                <i className="fas fa-edit"></i>
+              </Link>
+              <ReactTooltip id="edit" className="custom-tooltip" />
+              <a href="http://localhost:3000/" data-tip="Delete the post" data-for="delete" className="delete-post-button text-danger">
+                <i className="fas fa-trash"></i>
+              </a>
+              <ReactTooltip id="delete" className="custom-tooltip" />
+            </>
+          )}
         </span>
       </div>
 

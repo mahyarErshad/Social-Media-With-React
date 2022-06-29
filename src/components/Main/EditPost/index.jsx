@@ -82,6 +82,10 @@ function EditPost() {
       async function fetchData() {
         try {
           const response = await axios.get(`/post/${state.id}`, { cancelToken: cancelRequest.token });
+          if (globalState.user.username !== response.data.author.username) {
+            globalDispatch({ type: "flashMessages", value: "You do not have permission to perform this action" });
+            navigate("/");
+          }
           if (response.data.title) {
             dispatch({
               type: "fetchIsComplete",
@@ -142,10 +146,7 @@ function EditPost() {
     dispatch({ type: "submitHandler" });
   };
 
-  if (state.FOF)
-    return (
-        <FOF />
-    );
+  if (state.FOF) return <FOF />;
   if (state.isFetching)
     return (
       <Container title={"loading"}>
