@@ -5,9 +5,11 @@ import { useParams, Link } from "react-router-dom";
 import ReactTooltip from "react-tooltip";
 import Container from "../Container";
 import Loading from "../Loading";
+import FOF from "../FOF";
 
 function ViewPosts() {
   const [isLoading, setIsLoading] = useState(true);
+  const [notFound, setNotFound] = useState(false);
   const [post, setPost] = useState([]);
   const { id } = useParams();
 
@@ -17,8 +19,12 @@ function ViewPosts() {
       async function fetchData() {
         try {
           const response = await axios.get(`/post/${id}`, { cancelToken: cancelRequest.token });
-          setIsLoading(false);
-          setPost(response.data);
+          if (response.data) {
+            setIsLoading(false);
+            setPost(response.data);
+          } else {
+            setNotFound(true);
+          }
         } catch (e) {
           console.log(e);
         }
@@ -31,6 +37,7 @@ function ViewPosts() {
     [isLoading]
   );
 
+  if (notFound) return <FOF />;
   if (isLoading)
     return (
       <Container title={"loading"}>

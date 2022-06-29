@@ -21,6 +21,7 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Axios from "axios";
 import FlashMesaages from "./components/FlashMesaages/FlashMesaages";
 import { useImmerReducer } from "use-immer";
+import FOF from "./components/main/FOF";
 Axios.defaults.baseURL = "http://localhost:8080";
 
 function App() {
@@ -70,13 +71,14 @@ function App() {
           <Header />
           <FlashMesaages messages={state.flashMessages} />
           <Routes>
-            <Route path="/" exact element={state.loggedIn ? <LoggedInNoPosts /> : <GuestLogin />} />
+            <Route path="/" element={state.loggedIn ? <LoggedInNoPosts /> : <GuestLogin />} />
             <Route path="/about" element={<About />} />
             <Route path="/terms" element={<Terms />} />
             <Route path="/profile/:username" element={<Profile />} />
             <Route path="/post/:id" element={<ViewPosts />} />
-            <Route path="/post/:id/edit" element={<EditPost />} />
+            <Route path="/post/:id/edit" element={state.loggedIn ? <EditPost /> : <GuestLogin />} />
             <Route path="/create-post" element={state.loggedIn ? <CreatePost /> : <GuestLogin />} />
+            <Route path="*" element={<FOF/>} />
           </Routes>
           <Footer />
         </Router>

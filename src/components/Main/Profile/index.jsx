@@ -4,10 +4,12 @@ import { useParams } from "react-router-dom";
 import Container from "../Container/index.jsx";
 import StateContext from "../../../Context/StateContext";
 import ProfilePosts from "./ProfilePosts/index.jsx";
+import FOF from "../FOF/index.jsx";
 
 function Profile() {
   const { username } = useParams();
   const globalState = useContext(StateContext);
+  const [notFound , setNotFound] = useState(false);
   const [profileData, setProfileData] = useState({
     profileUsername: " ",
     profileAvatar: " ",
@@ -21,7 +23,11 @@ function Profile() {
       async function fetchData() {
         try {
           const response = await axios.post(`/profile/${username}`, { token: globalState.user.token }, { cancelToken: ourRequest.token });
-          setProfileData(response.data);
+          if(response.data){
+            setProfileData(response.data);
+          } else {
+            setNotFound(true);
+          }
         } catch (e) {
           console.log(e);
         }
@@ -33,6 +39,10 @@ function Profile() {
     }, // eslint-disable-next-line
     []
   );
+
+  if(notFound){
+    return <FOF/>
+  }
   return (
     <>
       <Container title={"profile"}>
