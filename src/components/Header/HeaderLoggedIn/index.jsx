@@ -9,9 +9,13 @@ function HeaderLoggedIn() {
   function handleSignOut() {
     globalDispatch({ type: "loggedOut" });
   }
+  function handleSearch(e) {
+    e.preventDefault();
+    globalDispatch({ type: "searching" });
+  }
   return (
     <div className="flex-row my-3 my-md-0">
-      <a href="#http://localhost:3000/" className="text-white mr-2 header-search-icon">
+      <a onClick={handleSearch} href="#http://localhost:3000/" className="text-white mr-2 header-search-icon">
         <i className="fas fa-search"></i>
       </a>
       <span className="mr-2 header-chat-icon text-white">

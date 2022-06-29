@@ -26,7 +26,7 @@ function ProfilePosts() {
         ourRequest.cancel();
       };
     }, // eslint-disable-next-line
-    [isLoading]
+    [isLoading , username]
   );
 
   if (isLoading)

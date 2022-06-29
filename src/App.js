@@ -22,6 +22,7 @@ import Axios from "axios";
 import FlashMesaages from "./components/FlashMesaages/FlashMesaages";
 import { useImmerReducer } from "use-immer";
 import FOF from "./components/main/FOF";
+import Search from "./components/Header/Search";
 Axios.defaults.baseURL = "http://localhost:8080";
 
 function App() {
@@ -33,6 +34,7 @@ function App() {
       avatar: localStorage.getItem("socialMediaAvatar"),
       token: localStorage.getItem("socialMediatoken"),
     },
+    isSearching: false,
   };
   function ourReducer(draft, action) {
     switch (action.type) {
@@ -45,6 +47,9 @@ function App() {
         return;
       case "flashMessages":
         draft.flashMessages.push(action.value);
+        return;
+      case "searching":
+        draft.isSearching = !draft.isSearching;
         return;
       default:
         return state;
@@ -78,8 +83,9 @@ function App() {
             <Route path="/post/:id" element={<ViewPosts />} />
             <Route path="/post/:id/edit" element={state.loggedIn ? <EditPost /> : <GuestLogin />} />
             <Route path="/create-post" element={state.loggedIn ? <CreatePost /> : <GuestLogin />} />
-            <Route path="*" element={<FOF/>} />
+            <Route path="*" element={<FOF />} />
           </Routes>
+          {state.isSearching && <Search />}
           <Footer />
         </Router>
       </DispatchContext.Provider>
