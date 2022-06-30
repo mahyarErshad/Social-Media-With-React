@@ -23,6 +23,7 @@ import FlashMesaages from "./components/FlashMesaages/FlashMesaages";
 import { useImmerReducer } from "use-immer";
 import FOF from "./components/main/FOF";
 import Search from "./components/Header/Search";
+import { CSSTransition } from "react-transition-group";
 Axios.defaults.baseURL = "http://localhost:8080";
 
 function App() {
@@ -85,7 +86,9 @@ function App() {
             <Route path="/create-post" element={state.loggedIn ? <CreatePost /> : <GuestLogin />} />
             <Route path="*" element={<FOF />} />
           </Routes>
-          {state.isSearching && <Search />}
+          <CSSTransition timeout={500} in={state.isSearching} classNames={"search-overlay"} unmountOnExit>
+            <Search />
+          </CSSTransition>
           <Footer />
         </Router>
       </DispatchContext.Provider>
