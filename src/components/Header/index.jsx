@@ -2,7 +2,7 @@ import React, { useContext } from "react";
 import { Link } from "react-router-dom";
 import HeaderLoggedIn from "./HeaderLoggedIn/index.jsx";
 import HeaderLoggedOut from "./HeaderLoggedOut/index.jsx";
-import StateContext from "../../Context/StateContext"
+import StateContext from "../../Context/StateContext";
 
 function Header() {
   const globalState = useContext(StateContext);
