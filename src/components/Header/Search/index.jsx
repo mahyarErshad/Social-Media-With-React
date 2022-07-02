@@ -2,12 +2,13 @@ import Axios from "axios";
 import React, { useContext, useEffect } from "react";
 import { useImmer } from "use-immer";
 import DispatchContext from "../../../Context/DispatchContext";
+import ShowSearch from "./ShowSearch";
 
 function Search() {
   const globalDispatch = useContext(DispatchContext);
   const [state, setState] = useImmer({
     terms: "",
-    results: "",
+    results: [],
     showing: "neither",
     requestCounts: 0,
   });
@@ -21,7 +22,7 @@ function Search() {
     if (state.terms.trim()) {
       setState((draft) => {
         draft.showing = "loading";
-      })
+      });
       const delay = setTimeout(() => {
         setState((draft) => {
           draft.requestCounts++;
@@ -33,7 +34,7 @@ function Search() {
       setState((draft) => {
         draft.showing = "neither";
       });
-    }
+    } // eslint-disable-next-line
   }, [state.terms]);
 
   useEffect(() => {
@@ -53,7 +54,7 @@ function Search() {
       fetchData();
     }
 
-    return () => ourRequest.cancel();
+    return () => ourRequest.cancel(); // eslint-disable-next-line
   }, [state.requestCounts]);
 
   return (
@@ -74,23 +75,21 @@ function Search() {
         <div className="container container--narrow py-3">
           <div className={"circle-loader " + (state.showing === "loading" ? "circle-loader--visible" : "")}></div>
           <div className={"live-search-results " + (state.showing === "results" ? "live-search-results--visible" : "")}>
-            <div className="list-group shadow-sm">
-              <div className="list-group-item active">
-                <strong>Search Results</strong> (3 items found)
+            {Boolean(state.results.length) && (
+              <div className="list-group shadow-sm">
+                <div className="list-group-item active">
+                  <strong>Search Results</strong> ({state.results.length} {state.results.length > 1 ? "items" : "item"} found)
+                </div>
+                {state.results.map((post) => {
+                  return <ShowSearch post={post} key={post._id} />;
+                })}
               </div>
-              <a href="#" className="list-group-item list-group-item-action">
-                <img className="avatar-tiny" src="https://gravatar.com/avatar/b9408a09298632b5151200f3449434ef?s=128" /> <strong>Example Post #1</strong>
-                <span className="text-muted small">by brad on 2/10/2020 </span>
-              </a>
-              <a href="#" className="list-group-item list-group-item-action">
-                <img className="avatar-tiny" src="https://gravatar.com/avatar/b9216295c1e3931655bae6574ac0e4c2?s=128" /> <strong>Example Post #2</strong>
-                <span className="text-muted small">by barksalot on 2/10/2020 </span>
-              </a>
-              <a href="#" className="list-group-item list-group-item-action">
-                <img className="avatar-tiny" src="https://gravatar.com/avatar/b9408a09298632b5151200f3449434ef?s=128" /> <strong>Example Post #3</strong>
-                <span className="text-muted small">by brad on 2/10/2020 </span>
-              </a>
-            </div>
+            )}
+            {Boolean(!state.results.length) && (
+              <p className="shadow-sm text-center alert alert-danger">
+                Sorry! There are no matching results for <strong>{`"${state.terms}"`}</strong>{" "}
+              </p>
+            )}
           </div>
         </div>
       </div>

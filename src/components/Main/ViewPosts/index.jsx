@@ -40,7 +40,7 @@ function ViewPosts() {
         cancelRequest.cancel();
       };
     }, // eslint-disable-next-line
-    [isLoading]
+    [isLoading , id]
   );
 
   if (notFound) return <FOF />;

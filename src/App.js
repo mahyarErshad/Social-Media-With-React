@@ -57,6 +57,7 @@ function App() {
     }
   }
   const [state, dispatch] = useImmerReducer(ourReducer, initialState);
+  const nodeRef = React.useRef(null)
 
   useEffect(() => {
     if (state.loggedIn) {
@@ -86,7 +87,7 @@ function App() {
             <Route path="/create-post" element={state.loggedIn ? <CreatePost /> : <GuestLogin />} />
             <Route path="*" element={<FOF />} />
           </Routes>
-          <CSSTransition timeout={500} in={state.isSearching} classNames={"search-overlay"} unmountOnExit>
+          <CSSTransition nodeRef={nodeRef} timeout={500} in={state.isSearching} classNames={"search-overlay"} unmountOnExit>
             <Search />
           </CSSTransition>
           <Footer />
