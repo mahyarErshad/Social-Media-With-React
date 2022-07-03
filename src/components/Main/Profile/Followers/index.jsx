@@ -4,9 +4,9 @@ import axios from "axios";
 import Loading from "../../Loading";
 import Container from "../../Container";
 
-function ProfilePosts() {
+function Followers() {
   const [isLoading, setIsLoading] = useState(true);
-  const [posts, setPosts] = useState([]);
+  const [followers, setFollowers] = useState([]);
   const { username } = useParams();
 
   useEffect(
@@ -14,9 +14,9 @@ function ProfilePosts() {
       const ourRequest = axios.CancelToken.source();
       async function fetchData() {
         try {
-          const response = await axios.get(`/profile/${username}/posts`, { cancelToken: ourRequest.token });
+          const response = await axios.get(`/profile/${username}/followers`, { cancelToken: ourRequest.token });
           setIsLoading(false);
-          setPosts(response.data);
+          setFollowers(response.data);
         } catch (e) {
           console.log(e);
         }
@@ -38,24 +38,22 @@ function ProfilePosts() {
 
   return (
     <div className="list-group">
-      {posts.length ? (
-        posts.map((post) => {
-          const date = new Date(post.createdDate);
-          const formattedDate = ` ${date.getDate()}/${date.getMonth() + 1}/${date.getFullYear()}`;
+      {followers.length ? (
+        followers.map((follower, index) => {
           return (
-            <Link key={post._id} to={`/post/${post._id}`} className="list-group-item list-group-item-action">
-              <img className="avatar-tiny" src={post.author.avatar} alt="avatar" /> <strong>{post.title}</strong> {`\t`}
-              <span className="text-muted small">on {formattedDate} </span>
+            <Link key={index} to={`/profile/${follower.username}`} className="list-group-item list-group-item-action">
+              <img className="avatar-tiny" src={follower.avatar} alt="avatar" /> {`\t`} <strong>{follower.username}</strong>
             </Link>
           );
         })
       ) : (
         <div className="text-center alert alert-warning">
-          <strong>{`"${username}" `}</strong>has not posted anything yet!
+          <strong>{`"${username}" `}</strong>
+          <span>has no followers!</span>
         </div>
       )}
     </div>
   );
 }
 
-export default ProfilePosts;
+export default Followers;

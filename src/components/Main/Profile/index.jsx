@@ -1,9 +1,8 @@
 import axios from "axios";
 import React, { useContext, useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { NavLink, Outlet, useParams } from "react-router-dom";
 import Container from "../Container/index.jsx";
 import StateContext from "../../../Context/StateContext";
-import ProfilePosts from "./ProfilePosts/index.jsx";
 import FOF from "../FOF/index.jsx";
 import { useImmer } from "use-immer";
 
@@ -137,9 +136,9 @@ function Profile() {
   } else {
     return (
       <>
-        <Container title={"profile"}>
+        <Container title={`${username}`}>
           <h2>
-            <img className="avatar-small" src={globalState.user.avatar} alt="avatar" /> {state.profileData.profileUsername}
+            <img className="avatar-small" src={state.profileData.profileAvatar} alt=" " /> {state.profileData.profileUsername}
             {globalState.loggedIn && globalState.user.username !== state.profileData.profileUsername && !state.profileData.isFollowing && state.profileData.profileUsername !== "loading..." ? (
               <button onClick={followUser} className="btn btn-primary btn-sm ml-2">
                 Follow <i className="fas fa-user-plus"></i>
@@ -157,18 +156,17 @@ function Profile() {
           </h2>
 
           <div className="profile-nav nav nav-tabs pt-2 mb-4">
-            <a href="http://localhost:3000/" className="active nav-item nav-link">
+            <NavLink to={`/profile/${state.profileData.profileUsername}`} className="nav-item nav-link" end>
               Posts: {state.profileData.counts.postCount}
-            </a>
-            <a href="http://localhost:3000/" className="nav-item nav-link">
+            </NavLink>
+            <NavLink to={`/profile/${state.profileData.profileUsername}/followers`} className="nav-item nav-link">
               Followers: {state.profileData.counts.followerCount}
-            </a>
-            <a href="http://localhost:3000/" className="nav-item nav-link">
+            </NavLink>
+            <NavLink to={`/profile/${state.profileData.profileUsername}/following`} className="nav-item nav-link">
               Following: {state.profileData.counts.followingCount}
-            </a>
+            </NavLink>
           </div>
-
-          <ProfilePosts />
+          <Outlet />
         </Container>
       </>
     );
