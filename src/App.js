@@ -26,6 +26,7 @@ import FOF from "./components/main/FOF";
 import Search from "./components/Header/Search";
 import { CSSTransition } from "react-transition-group";
 import Followers from "./components/main/Profile/Followers";
+import Chat from "./components/Chat";
 Axios.defaults.baseURL = "http://localhost:8080";
 
 function App() {
@@ -38,6 +39,7 @@ function App() {
       token: localStorage.getItem("socialMediatoken"),
     },
     isSearching: false,
+    isChatOpen: false,
   };
   function ourReducer(draft, action) {
     switch (action.type) {
@@ -56,6 +58,12 @@ function App() {
         return;
       case "closeSearching":
         draft.isSearching = false;
+        return;
+      case "toggleChat":
+        draft.isChatOpen = !draft.isChatOpen;
+        return;
+      case "closeChat":
+        draft.isChatOpen = false;
         return;
       default:
         return state;
@@ -99,6 +107,7 @@ function App() {
           <CSSTransition nodeRef={nodeRef} timeout={500} in={state.isSearching} classNames={"search-overlay"} unmountOnExit>
             <Search />
           </CSSTransition>
+          <Chat />
           <Footer />
         </Router>
       </DispatchContext.Provider>

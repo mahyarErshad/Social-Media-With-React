@@ -19,7 +19,7 @@ function HeaderLoggedIn() {
         <i className="fas fa-search"></i>
       </a>
       {`\t`}
-      <span className="mr-2 header-chat-icon text-white">
+      <span onClick={() => globalDispatch({ type: "toggleChat" })} className="mr-2 header-chat-icon text-white">
         <i className="fas fa-comment"></i>
         <span className="chat-count-badge text-white"> </span>
       </span>

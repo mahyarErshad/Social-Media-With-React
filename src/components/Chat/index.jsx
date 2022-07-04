@@ -1,11 +1,22 @@
-import React from "react";
+import React, { useContext, useEffect, useRef } from "react";
+import DispatchContext from "../../Context/DispatchContext";
+import StateContext from "../../Context/StateContext";
 
 function Chat() {
+  const chatField = useRef(null);
+  const globalState = useContext(StateContext);
+  const globalDispatch = useContext(DispatchContext);
+
+  useEffect(()=>{
+    if(globalState.isChatOpen){
+      chatField.current.focus();
+    }
+  } , [globalState.isChatOpen])
   return (
-    <div id="chat-wrapper" className="chat-wrapper chat-wrapper--is-visible shadow border-top border-left border-right">
+    <div id="chat-wrapper" className={"chat-wrapper shadow border-top border-left border-right " + (globalState.isChatOpen && "chat-wrapper--is-visible")}>
       <div className="chat-title-bar bg-primary">
         Chat
-        <span className="chat-title-bar-close">
+        <span onClick={() => globalDispatch({ type: "closeChat" })} className="chat-title-bar-close">
           <i className="fas fa-times-circle"></i>
         </span>
       </div>
@@ -32,7 +43,7 @@ function Chat() {
         </div>
       </div>
       <form id="chatForm" className="chat-form border-top">
-        <input type="text" className="chat-field" id="chatField" placeholder="Type a message…" autoComplete="off" />
+        <input ref={chatField} type="text" className="chat-field" id="chatField" placeholder="Type a message…" autoComplete="off" />
       </form>
     </div>
   );
