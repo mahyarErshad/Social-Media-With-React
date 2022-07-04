@@ -45,7 +45,7 @@ function Profile() {
         ourRequest.cancel();
       };
     }, // eslint-disable-next-line
-    [username]
+    [username , state.profileData.isFollowing]
   );
 
   useEffect(

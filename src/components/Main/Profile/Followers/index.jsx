@@ -4,20 +4,23 @@ import axios from "axios";
 import Loading from "../../Loading";
 import Container from "../../Container";
 
-function Followers() {
+function Followers(props) {
+  const action = props.type.action;
   const [isLoading, setIsLoading] = useState(true);
   const [followers, setFollowers] = useState([]);
   const { username } = useParams();
 
   useEffect(
     () => {
+      setIsLoading(true);
       const ourRequest = axios.CancelToken.source();
       async function fetchData() {
         try {
-          const response = await axios.get(`/profile/${username}/followers`, { cancelToken: ourRequest.token });
+          const response = await axios.get(`/profile/${username}/${action}`, { cancelToken: ourRequest.token });
           setIsLoading(false);
           setFollowers(response.data);
         } catch (e) {
+          setIsLoading(false);
           console.log(e);
         }
       }
@@ -26,12 +29,12 @@ function Followers() {
         ourRequest.cancel();
       };
     }, // eslint-disable-next-line
-    [isLoading, username]
+    [isLoading, username, action]
   );
 
   if (isLoading)
     return (
-      <Container title={"loading"}>
+      <Container title={username}>
         <Loading />
       </Container>
     );
@@ -49,7 +52,7 @@ function Followers() {
       ) : (
         <div className="text-center alert alert-warning">
           <strong>{`"${username}" `}</strong>
-          <span>has no followers!</span>
+          <span>{action === "followers" ? "has no followers!" : "is not following anybody!"}</span>
         </div>
       )}
     </div>

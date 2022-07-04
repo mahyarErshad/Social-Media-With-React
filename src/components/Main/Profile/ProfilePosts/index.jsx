@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from "react";
-import { useParams, Link } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import axios from "axios";
 import Loading from "../../Loading";
 import Container from "../../Container";
+import ShowSearch from "../../../Header/Search/ShowSearch";
 
 function ProfilePosts() {
   const [isLoading, setIsLoading] = useState(true);
@@ -31,7 +32,7 @@ function ProfilePosts() {
 
   if (isLoading)
     return (
-      <Container title={"loading"}>
+      <Container title={username}>
         <Loading />
       </Container>
     );
@@ -40,14 +41,7 @@ function ProfilePosts() {
     <div className="list-group">
       {posts.length ? (
         posts.map((post) => {
-          const date = new Date(post.createdDate);
-          const formattedDate = ` ${date.getDate()}/${date.getMonth() + 1}/${date.getFullYear()}`;
-          return (
-            <Link key={post._id} to={`/post/${post._id}`} className="list-group-item list-group-item-action">
-              <img className="avatar-tiny" src={post.author.avatar} alt="avatar" /> <strong>{post.title}</strong> {`\t`}
-              <span className="text-muted small">on {formattedDate} </span>
-            </Link>
-          );
+          return <ShowSearch post={post} key={post._id} noAuther={true} />;
         })
       ) : (
         <div className="text-center alert alert-warning">

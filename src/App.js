@@ -8,7 +8,7 @@ import About from "./components/main/About/index.jsx";
 import Terms from "./components/main/Terms/index.jsx";
 import Profile from "./components/main/Profile/index.jsx";
 import CreatePost from "./components/main/CreatePost/index.jsx";
-import LoggedInNoPosts from "./components/main/LoggedInNoPosts/index.jsx";
+import LoggedIn from "./components/main/LoggedIn/index.jsx";
 import ViewPosts from "./components/main/ViewPosts";
 import EditPost from "./components/main/EditPost";
 import ProfilePosts from "./components/main/Profile/ProfilePosts";
@@ -26,7 +26,6 @@ import FOF from "./components/main/FOF";
 import Search from "./components/Header/Search";
 import { CSSTransition } from "react-transition-group";
 import Followers from "./components/main/Profile/Followers";
-import Following from "./components/main/Profile/Following";
 Axios.defaults.baseURL = "http://localhost:8080";
 
 function App() {
@@ -55,6 +54,9 @@ function App() {
       case "searching":
         draft.isSearching = !draft.isSearching;
         return;
+      case "closeSearching":
+        draft.isSearching = false;
+        return;
       default:
         return state;
     }
@@ -81,13 +83,13 @@ function App() {
           <Header />
           <FlashMesaages messages={state.flashMessages} />
           <Routes>
-            <Route index element={state.loggedIn ? <LoggedInNoPosts /> : <GuestLogin />} />
+            <Route index element={state.loggedIn ? <LoggedIn /> : <GuestLogin />} />
             <Route path="/about" element={<About />} />
             <Route path="/terms" element={<Terms />} />
             <Route path="/profile/:username" element={<Profile />}>
               <Route index element={<ProfilePosts />} />
-              <Route path="/profile/:username/followers" element={<Followers />} />
-              <Route path="/profile/:username/following" element={<Following />} />
+              <Route path="/profile/:username/followers" element={<Followers type={{ action: "followers" }} />} />
+              <Route path="/profile/:username/following" element={<Followers type={{ action: "following" }} />} />
             </Route>
             <Route path="/post/:id" element={<ViewPosts />} />
             <Route path="/post/:id/edit" element={state.loggedIn ? <EditPost /> : <GuestLogin />} />
