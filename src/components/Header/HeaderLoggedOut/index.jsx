@@ -13,9 +13,9 @@ function HeaderLoggedOut() {
       });
       if (response.data) {
         globalDispatch({ type: "loggedIn", data: response.data });
-        // console.log(response.data)
+        globalDispatch({ type: "flashMessages", value: `Welcome back ${username}` });
       } else {
-        console.log("invalid username or password");
+        globalDispatch({ type: "flashMessages", value: "Invalid username/password" });
       }
     } catch (e) {
       console.error(e);

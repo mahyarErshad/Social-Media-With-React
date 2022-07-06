@@ -1,10 +1,14 @@
 import React, { useContext, useEffect, useRef } from "react";
+import { Link } from "react-router-dom";
+import io from "socket.io-client";
 import { useImmer } from "use-immer";
 import DispatchContext from "../../Context/DispatchContext";
 import StateContext from "../../Context/StateContext";
+const socket = io("http://localhost:8080");
 
 function Chat() {
   const chatField = useRef(null);
+  const chatLog = useRef(null);
   const globalState = useContext(StateContext);
   const globalDispatch = useContext(DispatchContext);
   const [state, setState] = useImmer({
@@ -15,8 +19,30 @@ function Chat() {
   useEffect(() => {
     if (globalState.isChatOpen) {
       chatField.current.focus();
+      globalDispatch({ type: "unreadChatReset" });
     }
+    // eslint-disable-next-line
   }, [globalState.isChatOpen]);
+
+  useEffect(() => {
+    chatLog.current.scrollTop = chatLog.current.scrollHeight;
+    if (state.messages.length && !globalState.isChatOpen) {
+      globalDispatch({ type: "unreadChatIncreament" });
+    }
+     // eslint-disable-next-line
+  }, [state.messages]);
+
+  useEffect(() => {
+    try {
+      socket.on("chatFromServer", (message) => {
+        setState((draft) => {
+          draft.messages.push(message);
+        });
+      });
+    } catch (e) {
+      console.log("Could not connect to chat server...");
+    } // eslint-disable-next-line
+  }, []);
 
   function handleInputChange(e) {
     const value = e.target.value;
@@ -28,6 +54,11 @@ function Chat() {
   function handleSubmit(e) {
     e.preventDefault();
     if (state.value) {
+      try {
+        socket.emit("chatFromBrowser", { message: state.value, token: globalState.user.token });
+      } catch (e) {
+        console.log("Could not connect to chat server...");
+      }
       setState((draft) => {
         draft.messages.push({ value: draft.value, username: globalState.user.username, avatar: globalState.user.avatar });
         draft.value = "";
@@ -42,7 +73,7 @@ function Chat() {
           <i className="fas fa-times-circle"></i>
         </span>
       </div>
-      <div id="chat" className="chat-log">
+      <div id="chat" className="chat-log" ref={chatLog}>
         {state.messages.map((message, index) => {
           if (globalState.user.username === message.username) {
             return (
@@ -54,19 +85,22 @@ function Chat() {
               </div>
             );
           } else {
-            <div className="chat-other">
-              <a href="#">
-                <img className="avatar-tiny" src="https://gravatar.com/avatar/b9216295c1e3931655bae6574ac0e4c2?s=128" alt="" />
-              </a>
-              <div className="chat-message">
-                <div className="chat-message-inner">
-                  <a href="#">
-                    <strong>barksalot:</strong>
-                  </a>
-                  Hey, I am good, how about you?
+            return (
+              <div key={index} className="chat-other">
+                <Link to={`/profile/${message.username}`}>
+                  <img className="avatar-tiny" src={message.avatar} alt="" />
+                </Link>
+                <div className="chat-message">
+                  <div className="chat-message-inner">
+                    <Link to={`/profile/${message.username}`}>
+                      <strong>{message.username}:</strong>
+                      {`\t`}
+                    </Link>
+                    {message.message}
+                  </div>
                 </div>
               </div>
-            </div>;
+            );
           }
         })}
       </div>

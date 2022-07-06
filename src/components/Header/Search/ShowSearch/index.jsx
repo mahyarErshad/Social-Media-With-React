@@ -9,7 +9,7 @@ function ShowSearch({ post, noAuther }) {
   return (
     <div className="list-group">
       <Link onClick={() => globalDispatch({ type: "closeSearching" })} to={`/post/${post._id}`} className="list-group-item list-group-item-action">
-        <img className="avatar-tiny" src={post.author.avatar} alt="avatar" /> <strong>{post.title}</strong> {`\t`}
+        <img className="avatar-tiny" src={post.author.avatar} alt="" /> <strong>{post.title}</strong> {`\t`}
         <span className="text-muted small">
           {`on ${formattedDate} `}{" "}
           {!noAuther && (

@@ -40,6 +40,7 @@ function App() {
     },
     isSearching: false,
     isChatOpen: false,
+    unreadChatCounter: 0,
   };
   function ourReducer(draft, action) {
     switch (action.type) {
@@ -65,6 +66,12 @@ function App() {
       case "closeChat":
         draft.isChatOpen = false;
         return;
+      case "unreadChatIncreament":
+        draft.unreadChatCounter++;
+        return;
+      case "unreadChatReset":
+        draft.unreadChatCounter = 0;
+        return;
       default:
         return state;
     }
@@ -83,6 +90,26 @@ function App() {
       localStorage.removeItem("socialMediatoken");
     } // eslint-disable-next-line
   }, [state.loggedIn]);
+
+  useEffect(() => {
+    const ourRequest = Axios.CancelToken.source();
+    if (state.loggedIn) {
+      async function fetchData() {
+        try {
+          const response = await Axios.post("/checkToken", { token: state.user.token }, { cancelToken: ourRequest.token });
+          if (!response.date) {
+            dispatch({ type: "loggedOut" });
+            dispatch({ type: "flashMessages", value: "Your session has expired. Please log in again." });
+          }
+        } catch (e) {
+          console.log(e);
+        }
+      }
+      fetchData();
+    }
+
+    return () => ourRequest.cancel(); // eslint-disable-next-line
+  }, []);
 
   return (
     <StateContext.Provider value={state}>
