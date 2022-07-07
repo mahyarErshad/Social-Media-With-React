@@ -3,12 +3,19 @@
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
 ## How to run locally:
+
 1- Create a MongoDB Cluster.
+
 2- In backend-api folder create a .env file and use this values:
+
   CONNECTIONSTRING=(Copy and paste the connection string which mongoDB gives it to you)
+  
   PORT=8080
+  
   JWTSECRET=super123secret456phrase789word
+  
  3- Open the backend-api folder in your vs-code or wherever you prefer and in terminal type this command: "npm start run"
+ 
  4- Open the main folder and type: "npm start"
 
 ## Available Scripts
