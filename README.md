@@ -1,4 +1,5 @@
-
+Based on <a href="https://www.udemy.com/course/react-for-the-rest-of-us/" target="_blank" > React For The Rest Of Us </a>
+ by Brad Schiff  
 
 ## How to run locally:
 
